@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-python
+  namespace: sopes1-workshop
+spec:
+  selector:
+    matchLabels:
+      name: deploy-python
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: deploy-python
+    spec:
+      containers:
+      - name: backend-python
+        image: osmanpl9610/api-python:v1
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: "250m"
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: secret-env
+              key: PORT
+        - name: DB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: secret-env
+              key: DB_DATABASE
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: secret-env
+              key: DB_HOST
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secret-env
+              key: DB_PASSWORD
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: secret-env
+              key: DB_PORT
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: secret-env
+              key: DB_USER
+      imagePullSecrets:
+        - name: dockerhubpull
+      
